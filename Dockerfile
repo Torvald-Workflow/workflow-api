@@ -8,7 +8,9 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci
+COPY --chown=node:node yarn.lock ./
+
+RUN yarn install --frozen-lockfile
 
 COPY --chown=node:node . .
 
@@ -24,15 +26,17 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
+COPY --chown=node:node yarn.lock ./
+
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
 
 COPY --chown=node:node . .
 
-RUN npm run build
+RUN yarn run build
 
 ENV NODE_ENV production
 
-RUN npm ci --only=production && npm cache clean --force
+RUN yarn install --frozen-lockfile --only=production && yarn cache clean --force
 
 USER node
 
