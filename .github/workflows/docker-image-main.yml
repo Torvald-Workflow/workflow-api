@@ -6,17 +6,20 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  DATE: $(date +%s)
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/workflow-api:$(date +%s)
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/workflow-api:${{ env.DATE }}
       - name: Log in to the Docker Hub registry
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/workflow-api:$(date +%s)
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/workflow-api:${{ env.DATE }}
   
   build-latest:
     runs-on: ubuntu-latest
