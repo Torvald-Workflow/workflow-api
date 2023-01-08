@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces:cached
+    command: sleep infinity
+    networks:
+      - workflow_api_dev
+
+  mariadb:
+    image: mariadb/server
+    container_name: mariadb_workflow_api_dev
+    restart: unless-stopped
+    volumes:
+      - mariadb-workflow-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: workflow_api_dev
+    networks:
+      - workflow_api_dev
+
+networks:
+  workflow_api_dev:
+
+volumes:
+  mariadb-workflow-data:
