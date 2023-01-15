@@ -8,8 +8,7 @@ services:
     volumes:
       - ..:/workspaces:cached
     command: sleep infinity
-    networks:
-      - workflow_api_dev
+    network_mode: service:mariadb
 
   mariadb:
     image: mariadb/server
@@ -20,11 +19,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: workflow_api_dev
-    networks:
-      - workflow_api_dev
-
-networks:
-  workflow_api_dev:
 
 volumes:
   mariadb-workflow-data:
