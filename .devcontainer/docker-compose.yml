@@ -19,6 +19,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: workflow_api_dev
+    ports:
+      - 3306:3306
 
 volumes:
   mariadb-workflow-data:
