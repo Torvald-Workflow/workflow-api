@@ -1,16 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AbstractEntity } from 'src/global/entity/AbstractEntity';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
-export class User {
-  @ApiProperty({
-    description: 'The unique identifier of a user',
-    minimum: 1,
-    example: 1,
-  })
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends AbstractEntity {
   @ApiProperty({
     description: 'The first name of a user',
     example: 'John',
