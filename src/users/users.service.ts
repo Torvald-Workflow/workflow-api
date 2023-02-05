@@ -4,18 +4,18 @@ import { PageMetaDto } from 'src/global/dto/PageMetaDto';
 import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
 import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
 import { Repository } from 'typeorm';
-import { User } from './entity/user.entity';
+import { UserEntity } from './entity/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
   async findAllUsers(
     pageOptionsDto: PageOptionsDto,
-  ): Promise<PaginatedElementDto<User>> {
+  ): Promise<PaginatedElementDto<UserEntity>> {
     const queryBuilder = this.usersRepository.createQueryBuilder('user');
 
     queryBuilder

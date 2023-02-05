@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AbstractEntity } from 'src/global/entity/AbstractEntity';
 import { Column, Entity } from 'typeorm';
 
-@Entity()
-export class User extends AbstractEntity {
+@Entity({ name: 'users' })
+export class UserEntity extends AbstractEntity {
   @ApiProperty({
     description: 'The first name of a user',
     example: 'John',
