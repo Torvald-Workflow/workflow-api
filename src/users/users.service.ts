@@ -4,6 +4,7 @@ import { PageMetaDto } from 'src/global/dto/PageMetaDto';
 import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
 import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from './dtos/CreateUserDto';
 import { UserEntity } from './entity/user.entity';
 
 @Injectable()
@@ -32,5 +33,16 @@ export class UsersService {
     });
 
     return new PaginatedElementDto(entities, pageMetaDto);
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const user = new UserEntity();
+
+    user.firstName = createUserDto.firstName;
+    user.lastName = createUserDto.lastName;
+    user.email = createUserDto.email;
+    user.password = createUserDto.password;
+
+    return await this.usersRepository.save(user);
   }
 }
