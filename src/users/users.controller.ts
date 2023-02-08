@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   Query,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';

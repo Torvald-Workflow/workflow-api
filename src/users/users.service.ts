@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+import { USERS_REPOSITORY } from 'src/constants';
 import { PageMetaDto } from 'src/global/dto/PageMetaDto';
 import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
 import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
@@ -10,7 +10,7 @@ import { UserEntity } from './entity/user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserEntity)
+    @Inject(USERS_REPOSITORY)
     private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
@@ -45,4 +45,12 @@ export class UsersService {
 
     return await this.usersRepository.save(user);
   }
+
+  // async deleteUsers(deleteUsersDto: DeleteUsersDto): Promise<UserEntity[]> {
+  //   const queryBuilder = this.usersRepository.createQueryBuilder('user');
+
+  //   queryBuilder.where('user.id IN (:...ids)', {}).orderBy('user.id', 'ASC');
+
+  //   await this.usersRepository.remove(users);
+  // }
 }
