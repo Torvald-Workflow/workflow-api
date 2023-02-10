@@ -1,4 +1,4 @@
-import { DATA_SOURCE, USERS_REPOSITORY } from 'src/constants';
+import { DATA_SOURCE, USERS_REPOSITORY } from 'src/global/constants';
 import { DataSource } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 
