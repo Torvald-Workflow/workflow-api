@@ -22,5 +22,13 @@ services:
     ports:
       - 3306:3306
 
+  maildev:
+    image: maildev/maildev
+    container_name: maildev_workflow_api_dev
+    restart: unless-stopped
+    ports:
+      - 1080:1080
+      - 1025:1025
+
 volumes:
   mariadb-workflow-data:
