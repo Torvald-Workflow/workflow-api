@@ -53,6 +53,17 @@ export class UsersService {
   }
 
   /**
+   * Fetch a user by id
+   * @param id number
+   * @returns Promise<UserEntity>
+   */
+  async findUser(id: number): Promise<UserEntity> {
+    return this.usersRepository.findOneBy({
+      id,
+    });
+  }
+
+  /**
    * Create user in database and return created user
    * @param createUserDto CreateUserDto
    * @returns Promise<UserEntity>
