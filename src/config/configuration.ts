@@ -16,4 +16,10 @@ export const validationSchema = Joi.object({
   DATABASE_USER: Joi.string().required(),
   DATABASE_PASSWORD: Joi.string().required(),
   DATABASE_NAME: Joi.string().required(),
+  MAILER_HOST: Joi.string().required(),
+  MAILER_PORT: Joi.number().default(5432),
+  MAILER_IGNORE_TLS: Joi.boolean().required(),
+  MAILER_SECURE: Joi.boolean().required(),
+  MAILER_USER: Joi.string().required(),
+  MAILER_PASSWORD: Joi.string().required(),
 });

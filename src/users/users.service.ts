@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable } from '@nestjs/common';
 import { USERS_REPOSITORY } from 'src/global/constants';
 import { PageMetaDto } from 'src/global/dto/PageMetaDto';
@@ -6,6 +7,7 @@ import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUserDto';
 import { DeleteUsersDto } from './dtos/DeleteUsersDto';
+import { EditUserDto } from './dtos/EditUserDto';
 import { UserEntity } from './entity/user.entity';
 
 @Injectable()
@@ -13,6 +15,7 @@ export class UsersService {
   constructor(
     @Inject(USERS_REPOSITORY)
     private readonly usersRepository: Repository<UserEntity>,
+    private readonly mailerService: MailerService,
   ) {}
 
   /**
@@ -24,6 +27,14 @@ export class UsersService {
     pageOptionsDto: PageOptionsDto,
   ): Promise<PaginatedElementDto<UserEntity>> {
     const queryBuilder = this.usersRepository.createQueryBuilder('user');
+
+    this.mailerService.sendMail({
+      to: 'test@test.fr',
+      from: 'noreply@workflow.dev',
+      subject: 'Testing mail',
+      text: 'Welcome',
+      html: '<b>Hello world</b>',
+    });
 
     queryBuilder
       .orderBy('user.id', pageOptionsDto.order)
@@ -39,6 +50,17 @@ export class UsersService {
     });
 
     return new PaginatedElementDto(entities, pageMetaDto);
+  }
+
+  /**
+   * Fetch a user by id
+   * @param id number
+   * @returns Promise<UserEntity>
+   */
+  async findUser(id: number): Promise<UserEntity> {
+    return this.usersRepository.findOneBy({
+      id,
+    });
   }
 
   /**
@@ -79,12 +101,11 @@ export class UsersService {
   }
 
   async editUser(id: number, createUserDto: EditUserDto): Promise<UserEntity> {
-    const user = await this.usersRepository.findOne(id);
+    const user = await this.usersRepository.findOne({ where: { id } });
 
     user.firstName = createUserDto.firstName;
     user.lastName = createUserDto.lastName;
     user.email = createUserDto.email;
-    user.password = createUserDto.password;
 
     return await this.usersRepository.save(user);
   }

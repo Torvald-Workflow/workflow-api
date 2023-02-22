@@ -5,3 +5,4 @@ export enum Order {
 
 export const USERS_REPOSITORY = 'USERS_REPOSITORY';
 export const DATA_SOURCE = 'DATA_SOURCE';
+export const MAILER_SOURCE = 'MAILER_SOURCE';
