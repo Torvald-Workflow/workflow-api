@@ -7,7 +7,7 @@ import {
   ParseIntPipe,
   Query,
   Req,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
