@@ -3,7 +3,7 @@ import { CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 export abstract class AbstractEntity {
   @PrimaryGeneratedColumn()
-  @Exclude()
+  // @Exclude()
   public id: number;
 
   @CreateDateColumn()

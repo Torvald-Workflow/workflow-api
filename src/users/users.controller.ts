@@ -1,6 +1,7 @@
 import {
   Body,
   ClassSerializerInterceptor,
+  ConflictException,
   Controller,
   Delete,
   Get,
@@ -17,6 +18,7 @@ import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
 import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
 import { ApiPaginatedResponse } from 'src/global/swaggerDecorator/ApiPaginatedResponse';
 import { CreateUserDto } from './dtos/CreateUserDto';
+import { DeleteUsersDto } from './dtos/DeleteUsersDto';
 import { EditUserDto } from './dtos/EditUserDto';
 import { UserEntity } from './entity/user.entity';
 import { UsersService } from './users.service';
@@ -50,8 +52,17 @@ export class UsersController {
 
   @Post()
   @ApiOkResponse({ type: UserEntity })
-  async createUser(@Query() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return this.usersService
+      .createUser(createUserDto)
+      .then((createdUser) => {
+        return createdUser;
+      })
+      .catch((err) => {
+        if (err.code === 'ER_DUP_ENTRY') {
+          throw new ConflictException('Email already exists');
+        }
+      });
   }
 
   @Put(':id')
@@ -61,22 +72,28 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() editUserDto: EditUserDto,
   ) {
-    return this.usersService.editUser(id, editUserDto);
+    return this.usersService
+      .editUser(id, editUserDto)
+      .then((createdUser) => {
+        return createdUser;
+      })
+      .catch((err) => {
+        if (err.code === 'ER_DUP_ENTRY') {
+          throw new ConflictException('Email already exists');
+        }
+      });
+  }
+
+  @Post('/deleteUsers')
+  @ApiOkResponse({ type: [UserEntity] })
+  async deleteUsers(@Body() deleteUsersDto: DeleteUsersDto) {
+    return this.usersService.deleteMultipleUsers(deleteUsersDto);
   }
 
   @Delete(':id')
-  @ApiOkResponse({ type: UserEntity, isArray: true })
+  @ApiOkResponse({ type: UserEntity })
   @ApiParam({ type: 'number', name: 'id' })
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);
   }
-
-  // @Delete(':ids')
-  // @ApiOkResponse({ type: [UserEntity] })
-  // @ApiParam({ type: 'number', name: 'ids' })
-  // async deleteUsers(
-  //   @Param('ids', new ParseArrayPipe({ items: Number })) ids: number[],
-  // ) {
-  //   return this.usersService.deleteUsers(ids);
-  // }
 }

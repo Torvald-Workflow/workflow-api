@@ -6,6 +6,7 @@ import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
 import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUserDto';
+import { DeleteUsersDto } from './dtos/DeleteUsersDto';
 import { EditUserDto } from './dtos/EditUserDto';
 import { UserEntity } from './entity/user.entity';
 
@@ -79,29 +80,8 @@ export class UsersService {
   }
 
   /**
-   * Delete users from database and return deleted users
-   * @param deleteUsersDto DeleteUsersDto
-   * @returns Promise<UserEntity[]>
-   */
-  async deleteUsers(ids: number[]): Promise<UserEntity[]> {
-    const queryBuilder = this.usersRepository.createQueryBuilder('user');
-
-    queryBuilder
-      .where('user.id IN (:...ids)', {
-        ids: ids,
-      })
-      .orderBy('user.id', 'ASC');
-
-    const users = await queryBuilder.getMany();
-
-    await this.usersRepository.remove(await queryBuilder.getMany());
-
-    return users;
-  }
-
-  /**
    * Edit a user in database and return edited user
-   * @param id numnber
+   * @param id number
    * @param createUserDto CreateUserDto
    * @returns Promise<UserEntity>
    */
@@ -113,5 +93,41 @@ export class UsersService {
     user.email = editUserDto.email;
 
     return await this.usersRepository.save(user);
+  }
+
+  /**
+   * Delete a user in database and return it
+   * @param id number
+   * @returns Promise<UserEntity>
+   */
+  async deleteUser(id: number): Promise<UserEntity> {
+    const user = await this.findUser(id);
+
+    await this.usersRepository.remove(user);
+
+    return user;
+  }
+
+  /**
+   * Delete multiple users in database and return them
+   * @param ids number[]
+   * @returns Promise<UserEntity[]>
+   */
+  async deleteMultipleUsers(
+    deleteUsersDto: DeleteUsersDto,
+  ): Promise<UserEntity[]> {
+    const queryBuilder = this.usersRepository.createQueryBuilder('user');
+
+    queryBuilder
+      .where('user.id IN (:...ids)', {
+        ids: deleteUsersDto.ids,
+      })
+      .orderBy('user.id', 'ASC');
+
+    const users = await queryBuilder.getMany();
+
+    await this.usersRepository.remove(users);
+
+    return users;
   }
 }
