@@ -6,7 +6,6 @@ import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
 import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUserDto';
-import { DeleteUsersDto } from './dtos/DeleteUsersDto';
 import { EditUserDto } from './dtos/EditUserDto';
 import { UserEntity } from './entity/user.entity';
 
@@ -84,12 +83,12 @@ export class UsersService {
    * @param deleteUsersDto DeleteUsersDto
    * @returns Promise<UserEntity[]>
    */
-  async deleteUsers(deleteUsersDto: DeleteUsersDto): Promise<UserEntity[]> {
+  async deleteUsers(ids: number[]): Promise<UserEntity[]> {
     const queryBuilder = this.usersRepository.createQueryBuilder('user');
 
     queryBuilder
       .where('user.id IN (:...ids)', {
-        ids: deleteUsersDto.ids,
+        ids: ids,
       })
       .orderBy('user.id', 'ASC');
 
@@ -100,12 +99,18 @@ export class UsersService {
     return users;
   }
 
-  async editUser(id: number, createUserDto: EditUserDto): Promise<UserEntity> {
+  /**
+   * Edit a user in database and return edited user
+   * @param id numnber
+   * @param createUserDto CreateUserDto
+   * @returns Promise<UserEntity>
+   */
+  async editUser(id: number, editUserDto: EditUserDto): Promise<UserEntity> {
     const user = await this.usersRepository.findOne({ where: { id } });
 
-    user.firstName = createUserDto.firstName;
-    user.lastName = createUserDto.lastName;
-    user.email = createUserDto.email;
+    user.firstName = editUserDto.firstName;
+    user.lastName = editUserDto.lastName;
+    user.email = editUserDto.email;
 
     return await this.usersRepository.save(user);
   }

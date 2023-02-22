@@ -1,18 +1,23 @@
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
+  Post,
+  Put,
   Query,
-  Req,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
 import { PaginatedElementDto } from 'src/global/dto/PaginatedElementDto';
 import { ApiPaginatedResponse } from 'src/global/swaggerDecorator/ApiPaginatedResponse';
+import { CreateUserDto } from './dtos/CreateUserDto';
+import { EditUserDto } from './dtos/EditUserDto';
 import { UserEntity } from './entity/user.entity';
 import { UsersService } from './users.service';
 
@@ -33,7 +38,7 @@ export class UsersController {
   @Get(':id')
   @ApiOkResponse({ type: UserEntity })
   @ApiParam({ type: 'number', name: 'id' })
-  async fetchUser(@Req() request, @Param('id', ParseIntPipe) id: number) {
+  async fetchUser(@Param('id', ParseIntPipe) id: number) {
     const foundUser = await this.usersService.findUser(id);
 
     if (!foundUser) {
@@ -42,4 +47,36 @@ export class UsersController {
 
     return foundUser;
   }
+
+  @Post()
+  @ApiOkResponse({ type: UserEntity })
+  async createUser(@Query() createUserDto: CreateUserDto) {
+    return this.usersService.createUser(createUserDto);
+  }
+
+  @Put(':id')
+  @ApiOkResponse({ type: UserEntity })
+  @ApiParam({ type: 'number', name: 'id' })
+  async editUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() editUserDto: EditUserDto,
+  ) {
+    return this.usersService.editUser(id, editUserDto);
+  }
+
+  @Delete(':id')
+  @ApiOkResponse({ type: UserEntity, isArray: true })
+  @ApiParam({ type: 'number', name: 'id' })
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
+  }
+
+  // @Delete(':ids')
+  // @ApiOkResponse({ type: [UserEntity] })
+  // @ApiParam({ type: 'number', name: 'ids' })
+  // async deleteUsers(
+  //   @Param('ids', new ParseArrayPipe({ items: Number })) ids: number[],
+  // ) {
+  //   return this.usersService.deleteUsers(ids);
+  // }
 }
