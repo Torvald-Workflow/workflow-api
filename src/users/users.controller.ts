@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   ClassSerializerInterceptor,
   ConflictException,
@@ -74,13 +75,20 @@ export class UsersController {
   ) {
     return this.usersService
       .editUser(id, editUserDto)
-      .then((createdUser) => {
-        return createdUser;
+      .then((editedUser) => {
+        console.log(editedUser);
+        if (!editedUser) {
+          throw new NotFoundException();
+        }
+        return editedUser;
       })
       .catch((err) => {
+        console.log(err);
         if (err.code === 'ER_DUP_ENTRY') {
           throw new ConflictException('Email already exists');
         }
+
+        throw new BadRequestException();
       });
   }
 
@@ -94,6 +102,12 @@ export class UsersController {
   @ApiOkResponse({ type: UserEntity })
   @ApiParam({ type: 'number', name: 'id' })
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.deleteUser(id);
+    const deletedUser = await this.usersService.deleteUser(id);
+
+    if (!deletedUser) {
+      throw new NotFoundException();
+    }
+
+    return deletedUser;
   }
 }

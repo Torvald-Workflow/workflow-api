@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { USERS_REPOSITORY } from 'src/global/constants';
 import { PageMetaDto } from 'src/global/dto/PageMetaDto';
 import { PageOptionsDto } from 'src/global/dto/PageOptionsDto';
@@ -86,7 +86,11 @@ export class UsersService {
    * @returns Promise<UserEntity>
    */
   async editUser(id: number, editUserDto: EditUserDto): Promise<UserEntity> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.findUser(id);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
 
     user.firstName = editUserDto.firstName;
     user.lastName = editUserDto.lastName;
