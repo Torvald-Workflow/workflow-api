@@ -13,7 +13,6 @@ async function bootstrap() {
     .setTitle('Workflow API')
     .setDescription('The Workflow API description')
     .setVersion('1.0')
-    .addTag('workflow')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

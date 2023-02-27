@@ -102,12 +102,14 @@ export class UsersController {
   @ApiOkResponse({ type: UserEntity })
   @ApiParam({ type: 'number', name: 'id' })
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    const deletedUser = await this.usersService.deleteUser(id);
+    const user = await this.usersService.findUser(id);
 
-    if (!deletedUser) {
+    if (!user) {
       throw new NotFoundException();
     }
 
-    return deletedUser;
+    await this.usersService.deleteUser(id);
+
+    return user;
   }
 }

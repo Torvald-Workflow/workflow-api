@@ -21,6 +21,7 @@
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
+        "GitHub.copilot-labs",
         "GitHub.copilot",
         "Orta.vscode-jest",
         "EditorConfig.EditorConfig",

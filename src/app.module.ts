@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration, { validationSchema } from './config/configuration';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     UsersModule,
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

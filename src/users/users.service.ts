@@ -1,4 +1,3 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { USERS_REPOSITORY } from 'src/global/constants';
 import { PageMetaDto } from 'src/global/dto/PageMetaDto';
@@ -15,7 +14,6 @@ export class UsersService {
   constructor(
     @Inject(USERS_REPOSITORY)
     private readonly usersRepository: Repository<UserEntity>,
-    private readonly mailerService: MailerService,
   ) {}
 
   /**
@@ -27,14 +25,6 @@ export class UsersService {
     pageOptionsDto: PageOptionsDto,
   ): Promise<PaginatedElementDto<UserEntity>> {
     const queryBuilder = this.usersRepository.createQueryBuilder('user');
-
-    this.mailerService.sendMail({
-      to: 'test@test.fr',
-      from: 'noreply@workflow.dev',
-      subject: 'Testing mail',
-      text: 'Welcome',
-      html: '<b>Hello world</b>',
-    });
 
     queryBuilder
       .orderBy('user.id', pageOptionsDto.order)
@@ -60,6 +50,17 @@ export class UsersService {
   async findUser(id: number): Promise<UserEntity> {
     return this.usersRepository.findOneBy({
       id,
+    });
+  }
+
+  /**
+   * Fetch a user by email
+   * @param email string
+   * @returns Promise<UserEntity>
+   */
+  async findUserByEmail(email: string): Promise<UserEntity> {
+    return this.usersRepository.findOneBy({
+      email,
     });
   }
 
