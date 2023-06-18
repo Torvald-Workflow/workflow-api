@@ -31,12 +31,22 @@ type Query {
 }
 
 type User {
+  _id: String!
   createdAt: DateTime!
+
+  """User email address"""
   email: String!
+
+  """User first name"""
   firstName: String!
-  id: String!
+
+  """User activation state"""
   isActive: Boolean!
+
+  """User isAdmin state"""
   isAdmin: Boolean!
+
+  """User last name"""
   lastName: String!
   password: String
   updatedAt: DateTime!

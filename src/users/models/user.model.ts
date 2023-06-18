@@ -1,30 +1,32 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 import { BaseModel } from 'src/base/models/base.model';
 
+@Schema()
 @ObjectType()
 export class User extends BaseModel {
-  @Field()
-  id: string;
+  @Field(() => String)
+  _id: MongooseSchema.Types.ObjectId | string;
 
   @Prop()
-  @Field()
+  @Field(() => String, { description: 'User first name' })
   firstName: string;
 
   @Prop()
-  @Field()
+  @Field(() => String, { description: 'User last name' })
   lastName: string;
 
   @Prop()
-  @Field()
+  @Field(() => String, { description: 'User email address' })
   email: string;
 
   @Prop()
-  @Field(() => Boolean)
+  @Field(() => Boolean, { description: 'User activation state' })
   isActive: boolean;
 
   @Prop()
-  @Field(() => Boolean)
+  @Field(() => Boolean, { description: 'User isAdmin state' })
   isAdmin: boolean;
 
   @Prop()
