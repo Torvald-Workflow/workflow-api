@@ -1,31 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-import { AuthService } from 'src/auth/auth.service';
-import { LoginUserInput } from '../common/auth/dto/LoginUserInput';
 import { CreateUserInput } from './dto/CreateUserInput';
 import { User } from './models/user.model';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
-    private readonly authService: AuthService,
-  ) {}
-
-  async loginUser(loginUserInput: LoginUserInput) {
-    const user = await this.authService.validateUser(
-      loginUserInput.email,
-      loginUserInput.password,
-    );
-
-    if (!user) {
-      throw new BadRequestException('Invalid credentials');
-    }
-
-    return this.authService.generateUserCredentials(user);
-  }
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async create(createUserInput: CreateUserInput) {
     const createdUser = new this.userModel();

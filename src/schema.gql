@@ -21,8 +21,22 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type LoggedInUserOutput {
+  """JWT token"""
+  access_token: String!
+}
+
+input LoginUserInput {
+  """Email of the user"""
+  email: String!
+
+  """Password of the user"""
+  password: String!
+}
+
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  login(loginUserInput: LoginUserInput!): LoggedInUserOutput!
 }
 
 type Query {

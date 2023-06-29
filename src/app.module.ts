@@ -14,7 +14,9 @@ import { UsersModule } from './users/users.module';
       sortSchema: true,
     }),
     UsersModule,
-    ConfigModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     CommonModule,
   ],
   controllers: [],
