@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from '../../users/models/user.model';
+import { UserEntity } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { LoginUserInput } from './dto/LoginUserInput';
 
@@ -28,13 +28,13 @@ export class AuthService {
     return null;
   }
 
-  async generateUserCredentials(user: User) {
+  async generateUserCredentials(user: UserEntity) {
     const payload = {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       isAdmin: user.isAdmin,
-      id: user._id,
+      id: user.id,
     };
 
     return {

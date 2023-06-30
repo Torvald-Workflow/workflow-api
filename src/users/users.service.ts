@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Model } from 'mongoose';
+import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/CreateUserInput';
-import { User } from './models/user.model';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
+  ) {}
 
   async create(createUserInput: CreateUserInput) {
-    const createdUser = new this.userModel();
+    const createdUser = new UserEntity();
 
     const password = await bcrypt.hash(createUserInput.password, 10);
 
@@ -21,18 +24,18 @@ export class UsersService {
     createdUser.isActive = true;
     createdUser.isAdmin = false;
 
-    return createdUser.save();
+    return await this.usersRepository.save(createdUser);
   }
 
   findAll() {
-    return this.userModel.find().exec();
+    return this.usersRepository.find();
   }
 
-  findOne(id: string) {
-    return this.userModel.findById(id).exec();
+  findOne(id: number) {
+    return this.usersRepository.findOneBy({ id });
   }
 
   findOneByEmail(email: string) {
-    return this.userModel.findOne({ email }).exec();
+    return this.usersRepository.findOneBy({ email });
   }
 }

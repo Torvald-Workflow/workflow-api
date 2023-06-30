@@ -27,17 +27,18 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/graphql": "^11.0.5",
     "@nestjs/jwt": "^10.1.0",
-    "@nestjs/mongoose": "^9.2.2",
     "@nestjs/passport": "^10.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/typeorm": "^10.0.0",
     "bcrypt": "^5.1.0",
     "graphql": "^16.6.0",
     "joi": "^17.9.2",
-    "mongoose": "^7.2.2",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
+    "pg": "^8.11.1",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
