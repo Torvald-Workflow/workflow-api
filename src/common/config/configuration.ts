@@ -8,7 +8,10 @@ export default () => ({
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_DATABASE: process.env.DB_DATABASE,
   },
-  secret: process.env.SECRET,
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expirationTime: process.env.JWT_EXPIRATION_TIME,
+  },
 });
 
 export const validationSchema = Joi.object({
@@ -17,5 +20,6 @@ export const validationSchema = Joi.object({
   DB_USERNAME: Joi.string().required(),
   DB_PASSWORD: Joi.string().required(),
   DB_DATABASE: Joi.string().required(),
-  SECRET: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
+  JWT_EXPIRATION_TIME: Joi.string().required(),
 });
