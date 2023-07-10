@@ -5,6 +5,7 @@ import { OnlyAdminUserInterceptor } from 'src/common/auth/interceptors/admin.int
 import { CreateUserInput } from './dto/CreateUserInput';
 import { UserEntity } from './entities/user.entity';
 import { UsersService } from './users.service';
+import { FetchUsersArgs } from './dto/FetchUsersArgs';
 
 @Resolver(() => UserEntity)
 export class UsersResolver {
@@ -13,8 +14,8 @@ export class UsersResolver {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(OnlyAdminUserInterceptor)
   @Query(() => [UserEntity])
-  async users() {
-    return this.usersService.findAll();
+  async users(@Args() args: FetchUsersArgs) {
+    return this.usersService.findAll(args);
   }
 
   @Query(() => UserEntity)
