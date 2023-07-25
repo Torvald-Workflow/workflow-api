@@ -37,6 +37,10 @@ export class UsersService {
     });
   }
 
+  async countAllUsers() {
+    return await this.usersRepository.count();
+  }
+
   async findOne(id: number) {
     return await this.usersRepository.findOneBy({ id });
   }
@@ -46,7 +50,15 @@ export class UsersService {
   }
 
   async removeOne(id: number) {
-    return await this.usersRepository.delete({ id });
+    const currentUser = await this.findOne(id);
+
+    if (!currentUser) {
+      throw new Error('User not found');
+    }
+
+    await this.usersRepository.delete({ id });
+
+    return currentUser;
   }
 
   async updateOne(id: number, updateUserInput: UpdateUserInput) {
@@ -60,7 +72,11 @@ export class UsersService {
     currentUser.lastName = updateUserInput.lastName;
     currentUser.email = updateUserInput.email;
 
-    return await this.usersRepository.update({ id }, currentUser);
+    const updatedUser = await this.usersRepository.save(currentUser);
+
+    console.log(updatedUser);
+
+    return updatedUser;
   }
 
   async updatePassword(
@@ -84,6 +100,6 @@ export class UsersService {
 
     currentUser.password = newPassword;
 
-    return await this.usersRepository.update({ id }, currentUser);
+    return await this.usersRepository.save(currentUser);
   }
 }

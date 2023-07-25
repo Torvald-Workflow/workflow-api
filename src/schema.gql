@@ -32,9 +32,12 @@ input LoginUserInput {
 type Mutation {
   createUser(createUserInput: CreateUserInput!): UserEntity!
   login(loginUserInput: LoginUserInput!): LoggedInUserOutput!
+  removeUser(id: Float!): UserEntity!
+  updateUser(id: Float!, updateUserInput: CreateUserInput!): UserEntity!
 }
 
 type Query {
+  countUsers: Float!
   userById(id: Float!): UserEntity!
   users(skip: Int! = 0, take: Int! = 25): [UserEntity!]!
 }
