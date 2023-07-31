@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
+import { LogbookModule } from './logbook/logbook.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
     CommonModule,
+    LogbookModule,
   ],
   controllers: [],
   providers: [],
