@@ -5,7 +5,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @ObjectType()
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  @Field(() => String, { description: 'Unique identifier' })
+  @Field(() => Number, { description: 'Unique identifier' })
   id: number;
 
   @Column()

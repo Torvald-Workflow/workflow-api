@@ -33,13 +33,36 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): UserEntity!
   login(loginUserInput: LoginUserInput!): LoggedInUserOutput!
   removeUser(id: Float!): UserEntity!
-  updateUser(id: Float!, updateUserInput: CreateUserInput!): UserEntity!
+  updateUser(id: Float!, updateUserInput: UpdateUserInput!): UserEntity!
+  updateUserPassword(id: Float!, updateUserPasswordInput: UpdateUserPasswordInput!): UserEntity!
 }
 
 type Query {
   countUsers: Float!
   userById(id: Float!): UserEntity!
   users(skip: Int! = 0, take: Int! = 25): [UserEntity!]!
+}
+
+input UpdateUserInput {
+  """The email of the user"""
+  email: String!
+
+  """The first name of the user"""
+  firstName: String!
+
+  """The active state of the user"""
+  isActive: Boolean!
+
+  """The last name of the user"""
+  lastName: String!
+}
+
+input UpdateUserPasswordInput {
+  """The password of the user"""
+  password: String!
+
+  """The password confirmation of the user"""
+  passwordConfirmation: String!
 }
 
 type UserEntity {
@@ -50,7 +73,7 @@ type UserEntity {
   firstName: String!
 
   """Unique identifier"""
-  id: String!
+  id: Float!
 
   """User isActive state"""
   isActive: String!

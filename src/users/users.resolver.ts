@@ -4,8 +4,10 @@ import { JwtAuthGuard } from 'src/common/auth/guards/jwt-auth.guard';
 import { OnlyAdminUserInterceptor } from 'src/common/auth/interceptors/admin.interceptor';
 import { CreateUserInput } from './dto/CreateUserInput';
 import { FetchUsersArgs } from './dto/FetchUsersArgs';
+import { UpdateUserPasswordInput } from './dto/UpdateUserPasswordInput';
 import { UserEntity } from './entities/user.entity';
 import { UsersService } from './users.service';
+import { UpdateUserInput } from './dto/UpdateUserInput';
 
 @Resolver(() => UserEntity)
 export class UsersResolver {
@@ -42,8 +44,17 @@ export class UsersResolver {
   @Mutation(() => UserEntity)
   async updateUser(
     @Args('id') id: number,
-    @Args('updateUserInput') updateUserInput: CreateUserInput,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ) {
     return await this.usersService.updateOne(id, updateUserInput);
+  }
+
+  @Mutation(() => UserEntity)
+  async updateUserPassword(
+    @Args('id') id: number,
+    @Args('updateUserPasswordInput')
+    updateUserPasswordInput: UpdateUserPasswordInput,
+  ) {
+    return await this.usersService.updatePassword(id, updateUserPasswordInput);
   }
 }

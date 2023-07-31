@@ -10,4 +10,7 @@ export class UpdateUserInput {
 
   @Field(() => String, { description: 'The email of the user' })
   email: string;
+
+  @Field(() => Boolean, { description: 'The active state of the user' })
+  isActive: boolean;
 }
