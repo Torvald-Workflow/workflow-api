@@ -6,6 +6,7 @@ import { join } from 'path';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { LogbookModule } from './logbook/logbook.module';
+import { ConfigurationModule } from './configuration/configuration.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LogbookModule } from './logbook/logbook.module';
     }),
     CommonModule,
     LogbookModule,
+    ConfigurationModule,
   ],
   controllers: [],
   providers: [],

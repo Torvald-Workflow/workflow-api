@@ -2,6 +2,28 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ConfigurationEntity {
+  """Unique identifier"""
+  id: Float!
+
+  """Configuration key"""
+  key: String!
+
+  """Configuration value"""
+  value: String!
+}
+
+input CreateLogbookInput {
+  """The content of the logbook"""
+  content: String!
+
+  """The date of the logbook"""
+  date: DateTime!
+
+  """The title of the logbook"""
+  title: String!
+}
+
 input CreateUserInput {
   """The email of the user"""
   email: String!
@@ -14,6 +36,33 @@ input CreateUserInput {
 
   """The password of the user"""
   password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input FindLogbooksInput {
+  """The end date where to search logbook"""
+  endDate: DateTime!
+
+  """The start date where to search logbook"""
+  startDate: DateTime!
+}
+
+type LogbookEntity {
+  """Logbook content"""
+  content: String!
+
+  """Logbook date"""
+  date: DateTime!
+
+  """Unique identifier"""
+  id: Float!
+
+  """Logbook title"""
+  title: String!
 }
 
 type LoggedInUserOutput {
@@ -30,17 +79,32 @@ input LoginUserInput {
 }
 
 type Mutation {
+  createLogbook(createLogbookInput: CreateLogbookInput!): LogbookEntity!
   createUser(createUserInput: CreateUserInput!): UserEntity!
   login(loginUserInput: LoginUserInput!): LoggedInUserOutput!
+  removeLogbook(id: Float!): LogbookEntity!
   removeUser(id: Float!): UserEntity!
+  updateConfiguration(configuration: UpdateOneConfigurationByKeyInput!): ConfigurationEntity!
+  updateConfigurations(configurations: [UpdateOneConfigurationByKeyInput!]!): [ConfigurationEntity!]!
+  updateLogbook(id: Float!, updateLogbookInput: CreateLogbookInput!): LogbookEntity!
   updateUser(id: Float!, updateUserInput: UpdateUserInput!): UserEntity!
   updateUserPassword(id: Float!, updateUserPasswordInput: UpdateUserPasswordInput!): UserEntity!
 }
 
 type Query {
+  configurations: [ConfigurationEntity!]!
   countUsers: Float!
+  logbooks(createLogbookInput: FindLogbooksInput!): [LogbookEntity!]!
   userById(id: Float!): UserEntity!
   users(skip: Int! = 0, take: Int! = 25): [UserEntity!]!
+}
+
+input UpdateOneConfigurationByKeyInput {
+  """The key of the configuration"""
+  key: String!
+
+  """The value of the configuration"""
+  value: String!
 }
 
 input UpdateUserInput {
