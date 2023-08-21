@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { GraphQLError } from 'graphql';
 import { UserEntity } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { LoginUserInput } from './dto/LoginUserInput';
@@ -49,7 +50,11 @@ export class AuthService {
     );
 
     if (!user) {
-      throw new BadRequestException('Invalid credentials');
+      throw new GraphQLError('Invalid credentials', {
+        extensions: {
+          code: 'INVALID_CREDENTIALS',
+        },
+      });
     }
 
     return this.generateUserCredentials(user);
