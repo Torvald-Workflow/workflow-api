@@ -5,6 +5,7 @@ import { GraphQLError } from 'graphql';
 import { UserEntity } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { LoginUserInput } from './dto/LoginUserInput';
+import { RegisterUserInput } from './dto/RegisterUserInput';
 
 @Injectable()
 export class AuthService {
@@ -40,6 +41,7 @@ export class AuthService {
 
     return {
       access_token: this.jwtService.sign(payload),
+      user,
     };
   }
 
@@ -58,5 +60,34 @@ export class AuthService {
     }
 
     return this.generateUserCredentials(user);
+  }
+
+  async registerUser(registerUserInput: RegisterUserInput) {
+    console.log(registerUserInput);
+    const user = await this.usersService.findOneByEmail(
+      registerUserInput.email,
+    );
+
+    if (user) {
+      throw new GraphQLError('Email already exists', {
+        extensions: {
+          code: 'EMAIL_ALREADY_EXISTS',
+        },
+      });
+    }
+
+    if (registerUserInput.password !== registerUserInput.confirmPassword) {
+      throw new GraphQLError('Passwords do not match', {
+        extensions: {
+          code: 'PASSWORDS_DO_NOT_MATCH',
+        },
+      });
+    }
+
+    const newUser = await this.usersService.create({
+      ...registerUserInput,
+    });
+
+    return this.generateUserCredentials(newUser);
   }
 }

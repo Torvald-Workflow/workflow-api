@@ -68,6 +68,9 @@ type LogbookEntity {
 type LoggedInUserOutput {
   """JWT token"""
   access_token: String!
+
+  """The user"""
+  user: UserEntity!
 }
 
 input LoginUserInput {
@@ -82,6 +85,7 @@ type Mutation {
   createLogbook(createLogbookInput: CreateLogbookInput!): LogbookEntity!
   createUser(createUserInput: CreateUserInput!): UserEntity!
   login(loginUserInput: LoginUserInput!): LoggedInUserOutput!
+  register(registerUserInput: RegisterUserInput!): LoggedInUserOutput!
   removeLogbook(id: Float!): LogbookEntity!
   removeUser(id: Float!): UserEntity!
   updateConfiguration(configuration: UpdateOneConfigurationByKeyInput!): ConfigurationEntity!
@@ -97,6 +101,23 @@ type Query {
   logbooks(createLogbookInput: FindLogbooksInput!): [LogbookEntity!]!
   userById(id: Float!): UserEntity!
   users(skip: Int! = 0, take: Int! = 25): [UserEntity!]!
+}
+
+input RegisterUserInput {
+  """The password of the user"""
+  confirmPassword: String!
+
+  """The email of the user"""
+  email: String!
+
+  """The first name of the user"""
+  firstName: String!
+
+  """The last name of the user"""
+  lastName: String!
+
+  """The password of the user"""
+  password: String!
 }
 
 input UpdateOneConfigurationByKeyInput {
