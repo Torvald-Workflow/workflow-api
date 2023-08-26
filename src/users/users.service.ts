@@ -45,6 +45,10 @@ export class UsersService {
     return await this.usersRepository.findOneBy({ id });
   }
 
+  async findMyself(userId: number) {
+    return await this.usersRepository.findOneBy({ id: userId });
+  }
+
   async findOneByEmail(email: string) {
     return await this.usersRepository.findOneBy({ email });
   }

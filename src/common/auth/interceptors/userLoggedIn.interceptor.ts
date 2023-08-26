@@ -8,7 +8,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class OnlyAdminUserInterceptor implements NestInterceptor {
+export class UserLoggedIn implements NestInterceptor {
   async intercept(
     context: ExecutionContext,
     next: CallHandler,
@@ -16,8 +16,8 @@ export class OnlyAdminUserInterceptor implements NestInterceptor {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
 
-    if (!req.user?.isAdmin) {
-      throw new Error('Only admin users can access this resource');
+    if (!req.user?.userId) {
+      throw new Error('User not logged in');
     }
 
     return next.handle();

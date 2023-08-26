@@ -99,6 +99,7 @@ type Query {
   configurations: [ConfigurationEntity!]!
   countUsers: Float!
   logbooks(createLogbookInput: FindLogbooksInput!): [LogbookEntity!]!
+  myself: UserEntity!
   userById(id: Float!): UserEntity!
   users(skip: Int! = 0, take: Int! = 25): [UserEntity!]!
 }

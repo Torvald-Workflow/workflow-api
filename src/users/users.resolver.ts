@@ -2,12 +2,14 @@ import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/common/auth/guards/jwt-auth.guard';
 import { OnlyAdminUserInterceptor } from 'src/common/auth/interceptors/admin.interceptor';
+import { UserLoggedIn } from 'src/common/auth/interceptors/userLoggedIn.interceptor';
+import { CurrentUserId } from 'src/common/decorators/CurrentUserId';
 import { CreateUserInput } from './dto/CreateUserInput';
 import { FetchUsersArgs } from './dto/FetchUsersArgs';
+import { UpdateUserInput } from './dto/UpdateUserInput';
 import { UpdateUserPasswordInput } from './dto/UpdateUserPasswordInput';
 import { UserEntity } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { UpdateUserInput } from './dto/UpdateUserInput';
 
 @Resolver(() => UserEntity)
 export class UsersResolver {
@@ -23,6 +25,13 @@ export class UsersResolver {
   @Query(() => Number)
   async countUsers() {
     return this.usersService.countAllUsers();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(UserLoggedIn)
+  @Query(() => UserEntity)
+  async myself(@CurrentUserId() userId: number) {
+    return this.usersService.findMyself(userId);
   }
 
   @Query(() => UserEntity)
