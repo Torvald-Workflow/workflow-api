@@ -23,6 +23,7 @@ export class UsersService {
     createdUser.firstName = createUserInput.firstName;
     createdUser.lastName = createUserInput.lastName;
     createdUser.email = createUserInput.email;
+    createdUser.username = createUserInput.username;
     createdUser.password = password;
     createdUser.isActive = true;
     createdUser.isAdmin = false;
@@ -75,6 +76,8 @@ export class UsersService {
     currentUser.firstName = updateUserInput.firstName;
     currentUser.lastName = updateUserInput.lastName;
     currentUser.email = updateUserInput.email;
+    currentUser.isActive = updateUserInput.isActive;
+    currentUser.username = updateUserInput.username;
 
     const updatedUser = await this.usersRepository.save(currentUser);
 

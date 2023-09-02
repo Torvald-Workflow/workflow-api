@@ -36,6 +36,9 @@ input CreateUserInput {
 
   """The password of the user"""
   password: String!
+
+  """The username of the user"""
+  username: String!
 }
 
 """
@@ -119,6 +122,9 @@ input RegisterUserInput {
 
   """The password of the user"""
   password: String!
+
+  """The username of the user"""
+  username: String!
 }
 
 input UpdateOneConfigurationByKeyInput {
@@ -141,6 +147,9 @@ input UpdateUserInput {
 
   """The last name of the user"""
   lastName: String!
+
+  """The username of the user"""
+  username: String!
 }
 
 input UpdateUserPasswordInput {
@@ -162,14 +171,17 @@ type UserEntity {
   id: Float!
 
   """User isActive state"""
-  isActive: String!
+  isActive: Boolean!
 
   """User isAdmin state"""
-  isAdmin: String!
+  isAdmin: Boolean!
 
   """User last name"""
   lastName: String!
 
   """User password"""
   password: String
+
+  """User username"""
+  username: String!
 }

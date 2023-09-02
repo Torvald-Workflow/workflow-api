@@ -15,6 +15,10 @@ export class CreateUserInput {
   @IsEmail()
   email: string;
 
+  @Field(() => String, { description: 'The username of the user' })
+  @IsNotEmpty()
+  username: string;
+
   @Field(() => String, { description: 'The password of the user' })
   @IsNotEmpty()
   password: string;

@@ -36,7 +36,13 @@ export class UsersResolver {
 
   @Query(() => UserEntity)
   async userById(@Args('id') id: number) {
-    return this.usersService.findOne(id);
+    const foundUser = await this.usersService.findOne(id);
+
+    if (!foundUser) {
+      throw new Error('User not found');
+    }
+
+    return foundUser;
   }
 
   @Mutation(() => UserEntity)

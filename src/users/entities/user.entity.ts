@@ -20,12 +20,16 @@ export class UserEntity {
   @Field(() => String, { description: 'User email' })
   email: string;
 
+  @Column({ unique: true })
+  @Field(() => String, { description: 'User username' })
+  username: string;
+
   @Column()
-  @Field(() => String, { description: 'User isActive state' })
+  @Field(() => Boolean, { description: 'User isActive state' })
   isActive: boolean;
 
   @Column()
-  @Field(() => String, { description: 'User isAdmin state' })
+  @Field(() => Boolean, { description: 'User isAdmin state' })
   isAdmin: boolean;
 
   @Column()

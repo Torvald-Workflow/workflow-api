@@ -8,6 +8,9 @@ export class UpdateUserInput {
   @Field(() => String, { description: 'The last name of the user' })
   lastName: string;
 
+  @Field(() => String, { description: 'The username of the user' })
+  username: string;
+
   @Field(() => String, { description: 'The email of the user' })
   email: string;
 

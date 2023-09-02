@@ -11,6 +11,10 @@ export class RegisterUserInput {
   @IsNotEmpty()
   lastName: string;
 
+  @Field(() => String, { description: 'The username of the user' })
+  @IsNotEmpty()
+  username: string;
+
   @Field(() => String, { description: 'The email of the user' })
   @IsEmail()
   email: string;
