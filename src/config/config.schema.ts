@@ -1,0 +1,26 @@
+import Joi from 'joi';
+
+export const validationSchema = Joi.object({
+  NODE_ENV: Joi.string().required(),
+  PORT: Joi.number().required(),
+  URL: Joi.string().required(),
+  DATABASE_HOST: Joi.string().required(),
+  DATABASE_PORT: Joi.number().required(),
+  DATABASE_USER: Joi.string().required(),
+  DATABASE_PASSWORD: Joi.string().required(),
+  DATABASE_NAME: Joi.string().required(),
+  JWT_ACCESS_TIME: Joi.number().required(),
+  JWT_CONFIRMATION_SECRET: Joi.string().required(),
+  JWT_CONFIRMATION_TIME: Joi.number().required(),
+  JWT_RESET_PASSWORD_SECRET: Joi.string().required(),
+  JWT_RESET_PASSWORD_TIME: Joi.number().required(),
+  JWT_REFRESH_SECRET: Joi.string().required(),
+  JWT_REFRESH_TIME: Joi.number().required(),
+  REFRESH_COOKIE: Joi.string().required(),
+  COOKIE_SECRET: Joi.string().required(),
+  EMAIL_HOST: Joi.string().required(),
+  EMAIL_PORT: Joi.number().required(),
+  EMAIL_SECURE: Joi.bool().required(),
+  EMAIL_USER: Joi.string().email().required(),
+  EMAIL_PASSWORD: Joi.string().required(),
+});
