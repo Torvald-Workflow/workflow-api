@@ -6,10 +6,10 @@ import {
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import { CommonService } from 'src/common/common.service';
-import { IJwt } from 'src/config/interfaces/jwt.interface';
-import { IUser } from 'src/users/interfaces/users.interface';
 import { v4 } from 'uuid';
-import { TokenTypeEnum } from './enums/tokenType.enum';
+import { IJwt } from '../config/interfaces/jwt.interface';
+import { IUser } from '../users/interfaces/user.interface';
+import { TokenTypeEnum } from './enums/token-type.enum';
 import {
   IAccessPayload,
   IAccessToken,

@@ -7,9 +7,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
+import { isInt } from 'class-validator';
 import { CommonService } from 'src/common/common.service';
+import { SLUG_REGEX } from 'src/common/consts/regex.const';
 import { isNull, isUndefined } from 'src/common/utils/validation.util';
 import { ChangeEmailDto } from './dtos/change-email.dto';
+import { PasswordDto } from './dtos/password.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 
@@ -147,8 +150,29 @@ export class UsersService {
     return user;
   }
 
-  public async remove(userId: number): Promise<UserEntity> {
+  public async confirmEmail(
+    userId: number,
+    version: number,
+  ): Promise<UserEntity> {
+    const user = await this.findOneByCredentials(userId, version);
+
+    if (user.confirmed) {
+      throw new BadRequestException('Email already confirmed');
+    }
+
+    user.confirmed = true;
+    user.credentials.updateVersion();
+    await this.commonService.saveEntity(this.usersRepository, user);
+    return user;
+  }
+
+  public async remove(userId: number, dto: PasswordDto): Promise<UserEntity> {
     const user = await this.findOneById(userId);
+
+    if (!(await compare(dto.password, user.password))) {
+      throw new BadRequestException('Invalid password');
+    }
+
     await this.commonService.removeEntity(this.usersRepository, user);
     return user;
   }
@@ -158,6 +182,26 @@ export class UsersService {
     return this.usersRepository.findOne({
       email: email.toLowerCase(),
     });
+  }
+
+  public async findOneByIdOrUsername(
+    idOrUsername: string,
+  ): Promise<UserEntity> {
+    const parsedValue = parseInt(idOrUsername, 10);
+
+    if (!isNaN(parsedValue) && parsedValue > 0 && isInt(parsedValue)) {
+      return this.findOneById(parsedValue);
+    }
+
+    if (
+      idOrUsername.length < 3 ||
+      idOrUsername.length > 106 ||
+      !SLUG_REGEX.test(idOrUsername)
+    ) {
+      throw new BadRequestException('Invalid username');
+    }
+
+    return this.findOneByUsername(idOrUsername);
   }
 
   private async checkEmailUniqueness(email: string): Promise<void> {

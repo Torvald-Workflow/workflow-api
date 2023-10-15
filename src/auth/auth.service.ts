@@ -12,7 +12,7 @@ import { CommonService } from 'src/common/common.service';
 import { SLUG_REGEX } from 'src/common/consts/regex.const';
 import { IMessage } from 'src/common/interfaces/message.interface';
 import { isNull, isUndefined } from 'src/common/utils/validation.util';
-import { TokenTypeEnum } from 'src/jwt/enums/tokenType.enum';
+import { TokenTypeEnum } from 'src/jwt/enums/token-type.enum';
 import { IEmailToken } from 'src/jwt/interfaces/email-token.interface';
 import { IRefreshToken } from 'src/jwt/interfaces/refresh-token.interface';
 import { JwtService } from 'src/jwt/jwt.service';
@@ -21,6 +21,7 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { ICredentials } from 'src/users/interfaces/credentials.interface';
 import { UsersService } from 'src/users/users.service';
 import { ChangePasswordDto } from './dtos/change-password.dto';
+import { ConfirmEmailDto } from './dtos/confirm-email.dto';
 import { EmailDto } from './dtos/email.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { SignInDto } from './dtos/sign-in.dto';
@@ -73,13 +74,30 @@ export class AuthService {
     return this.commonService.generateMessage('Registration successful');
   }
 
+  public async confirmEmail(
+    dto: ConfirmEmailDto,
+    domain?: string,
+  ): Promise<IAuthResult> {
+    const { confirmationToken } = dto;
+    const { id, version } = await this.jwtService.verifyToken<IEmailToken>(
+      confirmationToken,
+      TokenTypeEnum.CONFIRMATION,
+    );
+    const user = await this.usersService.confirmEmail(id, version);
+    const [accessToken, refreshToken] = await this.generateAuthTokens(
+      user,
+      domain,
+    );
+    return { user, accessToken, refreshToken };
+  }
+
   private comparePasswords(password1: string, password2: string): void {
     if (password1 !== password2) {
       throw new BadRequestException('Passwords do not match');
     }
   }
 
-  public async singIn(dto: SignInDto, domain?: string): Promise<IAuthResult> {
+  public async signIn(dto: SignInDto, domain?: string): Promise<IAuthResult> {
     const { emailOrUsername, password } = dto;
     const user = await this.userByEmailOrUsername(emailOrUsername);
 
@@ -258,6 +276,7 @@ export class AuthService {
   public async changePassword(
     userId: number,
     dto: ChangePasswordDto,
+    domain?: string,
   ): Promise<IAuthResult> {
     const { password1, password2, password } = dto;
     this.comparePasswords(password1, password2);
@@ -266,7 +285,10 @@ export class AuthService {
       password,
       password1,
     );
-    const [accessToken, refreshToken] = await this.generateAuthTokens(user);
+    const [accessToken, refreshToken] = await this.generateAuthTokens(
+      user,
+      domain,
+    );
     return { user, accessToken, refreshToken };
   }
 }

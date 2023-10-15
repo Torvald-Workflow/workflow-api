@@ -56,5 +56,13 @@ export function config(): IConfig {
       loadStrategy: LoadStrategy.JOINED,
       allowGlobalContext: true,
     }),
+    throttler: {
+      throttlers: [
+        {
+          ttl: parseInt(process.env.THROTTLE_TTL, 10),
+          limit: parseInt(process.env.THROTTLE_LIMIT, 10),
+        },
+      ],
+    },
   };
 }
