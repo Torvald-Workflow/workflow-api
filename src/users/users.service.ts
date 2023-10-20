@@ -161,7 +161,9 @@ export class UsersService {
     }
 
     user.confirmed = true;
+
     user.credentials.updateVersion();
+
     await this.commonService.saveEntity(this.usersRepository, user);
     return user;
   }

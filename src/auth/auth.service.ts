@@ -83,6 +83,7 @@ export class AuthService {
       confirmationToken,
       TokenTypeEnum.CONFIRMATION,
     );
+
     const user = await this.usersService.confirmEmail(id, version);
     const [accessToken, refreshToken] = await this.generateAuthTokens(
       user,

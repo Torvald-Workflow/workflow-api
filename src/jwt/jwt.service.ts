@@ -31,8 +31,8 @@ export class JwtService {
     private readonly commonService: CommonService,
   ) {
     this.jwtConfig = this.configService.get<IJwt>('jwt');
-    this.issuer = this.configService.get<string>('app.name');
-    this.domain = this.configService.get<string>('app.domain');
+    this.issuer = this.configService.get<string>('id');
+    this.domain = this.configService.get<string>('domain');
   }
 
   private static async generateTokenAsync(
@@ -83,6 +83,7 @@ export class JwtService {
     switch (tokenType) {
       case TokenTypeEnum.ACCESS:
         const { privateKey, time: accessTime } = this.jwtConfig.access;
+
         return this.commonService.throwInternalError(
           JwtService.generateTokenAsync({ id: user.id }, privateKey, {
             ...jwtOptions,

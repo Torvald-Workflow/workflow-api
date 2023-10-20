@@ -4,7 +4,7 @@ import { ICredentials } from '../interfaces/credentials.interface';
 
 @Embeddable()
 export class CredentialsEmbeddable implements ICredentials {
-  @Property({ default: 0 })
+  @Property({ default: 0, columnType: 'int' })
   public version = 0;
 
   @Property({ default: '' })

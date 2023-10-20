@@ -17,6 +17,7 @@ export function config(): IConfig {
   return {
     port: parseInt(process.env.PORT, 10),
     domain: process.env.DOMAIN,
+    id: process.env.APP_ID,
     jwt: {
       access: {
         privateKey,
