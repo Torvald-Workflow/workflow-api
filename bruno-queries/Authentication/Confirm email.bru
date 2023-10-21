@@ -5,11 +5,11 @@ meta {
 }
 
 post {
-  url: http://localhost:3000/auth/confirm-email
+  url: {{baseUrl}}/auth/confirm-email
   body: formUrlEncoded
-  auth: none
+  auth: bearer
 }
 
 body:form-urlencoded {
-  confirmationToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidmVyc2lvbiI6MCwiaWF0IjoxNjk3ODgwOTE4LCJleHAiOjE2OTc4ODQ1MTgsImF1ZCI6ImxvY2FsaG9zdDo1MTczIiwiaXNzIjoiZDI5ZWM1MTEtN2E5NC00YjNmLTljNmEtNjhiNDc4MDcxYzQyIiwic3ViIjoicWwyNjk3QGdtYWlsLmNvbSJ9._lnfdscGaD0ApD7AqM30Olnf50fqgHlYSha9l7-r4dc
+  confirmationToken: {{confirmationToken}}
 }
