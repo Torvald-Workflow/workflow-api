@@ -1,6 +1,7 @@
 export interface IResponseUser {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   username: string;
   createdAt: string;
   updatedAt: string;

@@ -12,13 +12,22 @@ export class ResponseUserMapper implements IResponseUser {
   public id: number;
 
   @ApiProperty({
-    description: 'User username',
-    example: 'john.doe1',
-    minLength: 3,
-    maxLength: 106,
+    description: 'User first name',
+    example: 'John',
+    minLength: 2,
+    maxLength: 255,
     type: String,
   })
-  public name: string;
+  public firstName: string;
+
+  @ApiProperty({
+    description: 'User last name',
+    example: 'Doe',
+    minLength: 2,
+    maxLength: 255,
+    type: String,
+  })
+  public lastName: string;
 
   @ApiProperty({
     description: 'User username',
@@ -50,7 +59,8 @@ export class ResponseUserMapper implements IResponseUser {
   public static map(user: IUser): ResponseUserMapper {
     return new ResponseUserMapper({
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       username: user.username,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),

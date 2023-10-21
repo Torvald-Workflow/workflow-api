@@ -3,7 +3,8 @@ import { IAuthResponseUser } from '../interfaces/auth-response-user.interface';
 
 export class AuthResponseUserMapper implements IAuthResponseUser {
   public id: number;
-  public name: string;
+  public firstName: string;
+  public lastName: string;
   public username: string;
   public email: string;
   public createdAt: string;
@@ -16,7 +17,8 @@ export class AuthResponseUserMapper implements IAuthResponseUser {
   public static map(user: IUser): AuthResponseUserMapper {
     return new AuthResponseUserMapper({
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       username: user.username,
       email: user.email,
       createdAt: user.createdAt.toISOString(),

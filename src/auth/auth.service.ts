@@ -62,9 +62,15 @@ export class AuthService {
   }
 
   public async signUp(dto: SignUpDto, domain?: string): Promise<IMessage> {
-    const { name, email, password1, password2 } = dto;
+    const { username, firstName, lastName, email, password1, password2 } = dto;
     this.comparePasswords(password1, password2);
-    const user = await this.usersService.create(email, name, password1);
+    const user = await this.usersService.create(
+      email,
+      username,
+      firstName,
+      lastName,
+      password1,
+    );
     const confirmationToken = await this.jwtService.generateToken(
       user,
       TokenTypeEnum.CONFIRMATION,

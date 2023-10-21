@@ -59,20 +59,24 @@ export class MailerService {
   }
 
   public sendConfirmationEmail(user: IUser, token: string): void {
-    const { email, name } = user;
+    const { email, firstName, lastName, username } = user;
     const subject = 'Confirm your email';
     const html = this.templates.confirmation({
-      name,
+      firstName,
+      lastName,
+      username,
       link: `https://${this.domain}/auth/confirm/${token}`,
     });
     this.sendEmail(email, subject, html, 'A new confirmation email was sent.');
   }
 
   public sendResetPasswordEmail(user: IUser, token: string): void {
-    const { email, name } = user;
+    const { email, firstName, lastName, username } = user;
     const subject = 'Reset your password';
     const html = this.templates.resetPassword({
-      name,
+      firstName,
+      lastName,
+      username,
       link: `https://${this.domain}/auth/reset-password/${token}`,
     });
     this.sendEmail(

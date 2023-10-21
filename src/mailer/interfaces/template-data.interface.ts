@@ -1,4 +1,6 @@
 export interface ITemplatedData {
-  name: string;
+  firstName: string;
+  lastName: string;
+  username: string;
   link: string;
 }

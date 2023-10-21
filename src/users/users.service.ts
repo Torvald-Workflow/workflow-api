@@ -26,16 +26,18 @@ export class UsersService {
 
   public async create(
     email: string,
-    name: string,
+    username: string,
+    firstName: string,
+    lastName: string,
     password: string,
   ): Promise<UserEntity> {
     const formattedEmail = email.toLowerCase();
     await this.checkEmailUniqueness(formattedEmail);
-    const formattedName = this.commonService.formatName(name);
     const user = this.usersRepository.create({
       email: formattedEmail,
-      name: formattedName,
-      username: await this.generateUsername(formattedName),
+      firstName,
+      lastName,
+      username,
       password: await hash(password, 10),
     });
     await this.commonService.saveEntity(this.usersRepository, user, true);
@@ -75,25 +77,12 @@ export class UsersService {
 
   public async update(userId: number, dto: UpdateUserDto): Promise<UserEntity> {
     const user = await this.findOneById(userId);
-    const { name, username } = dto;
+    const { firstName, lastName, username } = dto;
 
-    if (!isUndefined(name) && !isNull(name)) {
-      if (name === user.name) {
-        throw new BadRequestException('Name must be different');
-      }
-
-      user.name = this.commonService.formatName(name);
-    }
-    if (!isUndefined(username) && !isNull(username)) {
-      const formattedUsername = dto.username.toLowerCase();
-
-      if (user.username === formattedUsername) {
-        throw new BadRequestException('Username should be different');
-      }
-
-      await this.checkUsernameUniqueness(formattedUsername);
-      user.username = formattedUsername;
-    }
+    await this.checkUsernameUniqueness(username);
+    user.username = username;
+    user.firstName = firstName;
+    user.lastName = lastName;
 
     await this.commonService.saveEntity(this.usersRepository, user);
     return user;
