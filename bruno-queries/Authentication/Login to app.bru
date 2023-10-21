@@ -1,0 +1,16 @@
+meta {
+  name: Login to app
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/auth/sign-in
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  emailOrUsername: quentin.laurent
+  password: 123Aze+++
+}

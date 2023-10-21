@@ -54,6 +54,7 @@ export class AuthGuard implements CanActivate {
     const authArr = auth.split(' ');
     const bearer = authArr[0];
     const token = authArr[1];
+    console.log(authArr);
 
     if (isUndefined(bearer) || isNull(bearer) || bearer !== 'Bearer') {
       return isPublic;

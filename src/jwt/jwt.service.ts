@@ -57,11 +57,14 @@ export class JwtService {
     options: jwt.VerifyOptions,
   ): Promise<T> {
     return new Promise((resolve, rejects) => {
+      console.log(token, secret, options);
       jwt.verify(token, secret, options, (error, payload: T) => {
         if (error) {
+          console.error(error);
           rejects(error);
           return;
         }
+        console.log(payload);
         resolve(payload);
       });
     });

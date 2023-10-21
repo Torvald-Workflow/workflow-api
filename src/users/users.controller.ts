@@ -18,7 +18,6 @@ import {
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { IAuthResponseUser } from 'src/auth/interfaces/auth-response-user.interface';
 import { AuthResponseUserMapper } from 'src/auth/mappers/auth-response-user.mapper';
 import { ChangeEmailDto } from './dtos/change-email.dto';
@@ -41,7 +40,7 @@ export class UsersController {
     this.cookieName = this.configService.get<string>('COOKIE_NAME');
   }
 
-  @Public()
+  // @Public()
   @Get('/:idOrUsername')
   @ApiOkResponse({
     type: ResponseUserMapper,
