@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_PATH="$(readlink -f $0)"
+SCRIPT_PATH="$(readlink -f "$0")"
 KEY_PATH="$(dirname "$SCRIPT_PATH")/../keys"
 PRIVATE_KEY_PATH="$KEY_PATH/private.key"
 PUBLIC_KEY_PATH="$KEY_PATH/public.key"
