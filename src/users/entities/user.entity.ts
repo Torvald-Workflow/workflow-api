@@ -1,10 +1,6 @@
 import { Embedded, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { IsBoolean, IsEmail, IsString, Length, Matches } from 'class-validator';
-import {
-  BCRYPT_HASH,
-  NAME_REGEX,
-  SLUG_REGEX,
-} from '../../common/consts/regex.const';
+import { BCRYPT_HASH, SLUG_REGEX } from '../../common/consts/regex.const';
 import { CredentialsEmbeddable } from '../embeddables/credentials.embeddable';
 import { IUser } from '../interfaces/user.interface';
 
