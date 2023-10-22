@@ -35,8 +35,8 @@ export class UsersService {
     await this.checkEmailUniqueness(formattedEmail);
     const user = this.usersRepository.create({
       email: formattedEmail,
-      firstName,
-      lastName,
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
       username,
       password: await hash(password, 10),
     });
@@ -81,8 +81,8 @@ export class UsersService {
 
     await this.checkUsernameUniqueness(username);
     user.username = username;
-    user.firstName = firstName;
-    user.lastName = lastName;
+    user.firstName = firstName.toLowerCase();
+    user.lastName = lastName.toLowerCase();
 
     await this.commonService.saveEntity(this.usersRepository, user);
     return user;
