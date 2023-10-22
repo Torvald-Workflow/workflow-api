@@ -139,7 +139,7 @@ export class CommonService {
    * Takes a string and generates a slug with dtos as word separators
    */
   public generatePointSlug(str: string): string {
-    return slugify(str, { lower: true, replacement: '.', remove: /['_\.\-]/g });
+    return slugify(str, { lower: true, replacement: '.', remove: /['_.-]/g });
   }
 
   public generateMessage(message: string): IMessage {

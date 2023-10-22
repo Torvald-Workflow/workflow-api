@@ -217,21 +217,6 @@ export class UsersService {
     return user;
   }
 
-  private async generateUsername(name: string): Promise<string> {
-    const pointSlug = this.commonService.generatePointSlug(name);
-    const count = await this.usersRepository.count({
-      username: {
-        $like: `${pointSlug}%`,
-      },
-    });
-
-    if (count > 0) {
-      return `${pointSlug}${count}`;
-    }
-
-    return pointSlug;
-  }
-
   private throwUnauthorizedException(
     user: undefined | null | UserEntity,
   ): void {

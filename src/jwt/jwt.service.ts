@@ -82,7 +82,7 @@ export class JwtService {
     };
 
     switch (tokenType) {
-      case TokenTypeEnum.ACCESS:
+      case TokenTypeEnum.ACCESS: {
         const { privateKey, time: accessTime } = this.jwtConfig.access;
 
         return this.commonService.throwInternalError(
@@ -92,7 +92,8 @@ export class JwtService {
             algorithm: 'RS256', // to use public and private key
           }),
         );
-      case TokenTypeEnum.REFRESH:
+      }
+      case TokenTypeEnum.REFRESH: {
         const { secret: refreshSecret, time: refreshTime } =
           this.jwtConfig.refresh;
         return this.commonService.throwInternalError(
@@ -109,8 +110,9 @@ export class JwtService {
             },
           ),
         );
+      }
       case TokenTypeEnum.CONFIRMATION:
-      case TokenTypeEnum.RESET_PASSWORD:
+      case TokenTypeEnum.RESET_PASSWORD: {
         const { secret, time } = this.jwtConfig[tokenType];
         return this.commonService.throwInternalError(
           JwtService.generateTokenAsync(
@@ -122,6 +124,7 @@ export class JwtService {
             },
           ),
         );
+      }
     }
   }
 
@@ -150,7 +153,7 @@ export class JwtService {
     };
 
     switch (tokenType) {
-      case TokenTypeEnum.ACCESS:
+      case TokenTypeEnum.ACCESS: {
         const { publicKey, time: accessTime } = this.jwtConfig.access;
         return JwtService.throwBadRequest(
           JwtService.verifyTokenAsync(token, publicKey, {
@@ -159,9 +162,10 @@ export class JwtService {
             algorithms: ['RS256'],
           }),
         );
+      }
       case TokenTypeEnum.REFRESH:
       case TokenTypeEnum.CONFIRMATION:
-      case TokenTypeEnum.RESET_PASSWORD:
+      case TokenTypeEnum.RESET_PASSWORD: {
         const { secret, time } = this.jwtConfig[tokenType];
         return JwtService.throwBadRequest(
           JwtService.verifyTokenAsync(token, secret, {
@@ -170,6 +174,7 @@ export class JwtService {
             algorithms: ['HS256'],
           }),
         );
+      }
     }
   }
 }
