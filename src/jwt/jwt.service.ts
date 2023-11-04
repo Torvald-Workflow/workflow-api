@@ -68,6 +68,22 @@ export class JwtService {
     });
   }
 
+  private static async throwBadRequest<
+    T extends IAccessToken | IRefreshToken | IEmailToken,
+  >(promise: Promise<T>): Promise<T> {
+    try {
+      return await promise;
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new BadRequestException('Token expired');
+      }
+      if (error instanceof jwt.JsonWebTokenError) {
+        throw new BadRequestException('Invalid token');
+      }
+      throw new InternalServerErrorException(error);
+    }
+  }
+
   public async generateToken(
     user: IUser,
     tokenType: TokenTypeEnum,
@@ -125,22 +141,6 @@ export class JwtService {
           ),
         );
       }
-    }
-  }
-
-  private static async throwBadRequest<
-    T extends IAccessToken | IRefreshToken | IEmailToken,
-  >(promise: Promise<T>): Promise<T> {
-    try {
-      return await promise;
-    } catch (error) {
-      if (error instanceof jwt.TokenExpiredError) {
-        throw new BadRequestException('Token expired');
-      }
-      if (error instanceof jwt.JsonWebTokenError) {
-        throw new BadRequestException('Invalid token');
-      }
-      throw new InternalServerErrorException(error);
     }
   }
 
