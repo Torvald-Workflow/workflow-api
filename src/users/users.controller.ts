@@ -32,7 +32,7 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  private cookiePath = '/api/auth';
+  private cookiePath = '/auth';
   private cookieName: string;
 
   constructor(
