@@ -12,6 +12,7 @@ import { CommonService } from 'src/common/common.service';
 import { SLUG_REGEX } from 'src/common/consts/regex.const';
 import { isNull, isUndefined } from 'src/common/utils/validation.util';
 import { ChangeEmailDto } from './dtos/change-email.dto';
+import { GetUsersParams } from './dtos/get-users.params';
 import { PasswordDto } from './dtos/password.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -32,7 +33,10 @@ export class UsersService {
     password: string,
   ): Promise<UserEntity> {
     const formattedEmail = email.toLowerCase();
+
     await this.checkEmailUniqueness(formattedEmail);
+    await this.checkUsernameUniqueness(username);
+
     const user = this.usersRepository.create({
       email: formattedEmail,
       firstName: firstName.toLowerCase(),
@@ -42,6 +46,13 @@ export class UsersService {
     });
     await this.commonService.saveEntity(this.usersRepository, user, true);
     return user;
+  }
+
+  public async findAll(params: GetUsersParams): Promise<UserEntity[]> {
+    return this.usersRepository.findAll({
+      limit: params.take,
+      offset: params.skip,
+    });
   }
 
   public async findOneById(id: number): Promise<UserEntity> {
@@ -195,14 +206,6 @@ export class UsersService {
     return this.findOneByUsername(idOrUsername);
   }
 
-  private async checkEmailUniqueness(email: string): Promise<void> {
-    const count = await this.usersRepository.count({ email });
-
-    if (count > 0) {
-      throw new ConflictException('Email already in use');
-    }
-  }
-
   public async findOneByCredentials(
     id: number,
     version: number,
@@ -215,6 +218,14 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  private async checkEmailUniqueness(email: string): Promise<void> {
+    const count = await this.usersRepository.count({ email });
+
+    if (count > 0) {
+      throw new ConflictException('Email already in use');
+    }
   }
 
   private throwUnauthorizedException(

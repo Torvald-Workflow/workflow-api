@@ -22,10 +22,12 @@ import { IAuthResponseUser } from 'src/auth/interfaces/auth-response-user.interf
 import { AuthResponseUserMapper } from 'src/auth/mappers/auth-response-user.mapper';
 import { ChangeEmailDto } from './dtos/change-email.dto';
 import { GetUserParams } from './dtos/get-user.params';
+import { GetUsersParams } from './dtos/get-users.params';
 import { PasswordDto } from './dtos/password.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { IResponseUser } from './interfaces/response-user.interface';
 import { ResponseUserMapper } from './mappers/reponse-user.mapper';
+import { ResponseUsersMapper } from './mappers/reponse-users.mapper';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -40,7 +42,18 @@ export class UsersController {
     this.cookieName = this.configService.get<string>('COOKIE_NAME');
   }
 
-  // @Public()
+  @Get('/')
+  @ApiOkResponse({
+    type: ResponseUsersMapper,
+    isArray: true,
+  })
+  public async getUsers(
+    @Param() params: GetUsersParams,
+  ): Promise<IResponseUser[]> {
+    const users = await this.usersService.findAll(params);
+    return users.map((user) => ResponseUsersMapper.map(user));
+  }
+
   @Get('/:idOrUsername')
   @ApiOkResponse({
     type: ResponseUserMapper,

@@ -12,6 +12,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { Request, Response } from 'express-serve-static-core';
 import { IMessage } from 'src/common/interfaces/message.interface';
@@ -32,6 +40,7 @@ import { AuthResponseUserMapper } from './mappers/auth-response-user.mapper';
 import { AuthResponseMapper } from './mappers/auth-response.mapper';
 
 @Controller('auth')
+@ApiTags('auth')
 @UseGuards(ThrottlerGuard)
 export class AuthController {
   private readonly cookiePath = '/api/auth';
@@ -50,6 +59,25 @@ export class AuthController {
   }
 
   @Public()
+  @ApiBody({
+    type: SignUpDto,
+  })
+  @ApiConflictResponse({
+    description: 'Email already in use',
+  })
+  @ApiConflictResponse({
+    description: 'Username already in use',
+  })
+  @ApiBadRequestResponse({
+    description: 'Passwords do not match',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'Password requires a lowercase letter, an uppercase letter, and a number or symbol.',
+  })
+  @ApiCreatedResponse({
+    description: 'Registration successful',
+  })
   @Post('/sign-up')
   public async signUp(
     @Origin() origin: string | undefined,
@@ -59,6 +87,12 @@ export class AuthController {
   }
 
   @Public()
+  @ApiResponse({
+    type: AuthResponseMapper,
+  })
+  @ApiBody({
+    type: SignInDto,
+  })
   @Post('/sign-in')
   public async signIn(
     @Res() res: Response,
@@ -72,6 +106,9 @@ export class AuthController {
   }
 
   @Public()
+  @ApiResponse({
+    type: AuthResponseMapper,
+  })
   @Post('/refresh-access')
   public async refreshAccess(
     @Req() req: Request,

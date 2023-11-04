@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IUser } from '../../users/interfaces/user.interface';
-import { IAuthResponseUser } from '../interfaces/auth-response-user.interface';
+import { IResponseUsers } from '../interfaces/response-users.interface';
+import { IUser } from '../interfaces/user.interface';
 
-export class AuthResponseUserMapper implements IAuthResponseUser {
+export class ResponseUsersMapper implements IResponseUsers {
   @ApiProperty({
     description: 'User id',
     example: 123,
@@ -46,6 +46,13 @@ export class AuthResponseUserMapper implements IAuthResponseUser {
   public email: string;
 
   @ApiProperty({
+    description: 'User confirmation status',
+    example: true,
+    type: Boolean,
+  })
+  confirmed: boolean;
+
+  @ApiProperty({
     description: 'User creation date',
     example: '2021-01-01T00:00:00.000Z',
     type: String,
@@ -53,23 +60,24 @@ export class AuthResponseUserMapper implements IAuthResponseUser {
   public createdAt: string;
 
   @ApiProperty({
-    description: 'User update date',
+    description: 'User last update date',
     example: '2021-01-01T00:00:00.000Z',
     type: String,
   })
   public updatedAt: string;
 
-  constructor(values: IAuthResponseUser) {
+  constructor(values: IResponseUsers) {
     Object.assign(this, values);
   }
 
-  public static map(user: IUser): AuthResponseUserMapper {
-    return new AuthResponseUserMapper({
+  public static map(user: IUser): ResponseUsersMapper {
+    return new ResponseUsersMapper({
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
       email: user.email,
+      confirmed: user.confirmed,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     });

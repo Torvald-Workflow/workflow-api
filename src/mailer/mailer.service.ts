@@ -62,10 +62,10 @@ export class MailerService {
     const { email, firstName, lastName, username } = user;
     const subject = 'Confirm your email';
     const html = this.templates.confirmation({
-      firstName,
-      lastName,
+      firstName: this.capitalizeFirstLetter(firstName),
+      lastName: lastName.toUpperCase(),
       username,
-      link: `https://${this.domain}/auth/confirm/${token}`,
+      link: `http://${this.domain}/auth/confirm/${btoa(token)}`,
     });
     this.sendEmail(email, subject, html, 'A new confirmation email was sent.');
   }
@@ -74,10 +74,10 @@ export class MailerService {
     const { email, firstName, lastName, username } = user;
     const subject = 'Reset your password';
     const html = this.templates.resetPassword({
-      firstName,
-      lastName,
+      firstName: this.capitalizeFirstLetter(firstName),
+      lastName: lastName.toUpperCase(),
       username,
-      link: `https://${this.domain}/auth/reset-password/${token}`,
+      link: `http://${this.domain}/auth/reset-password/${btoa(token)}`,
     });
     this.sendEmail(
       email,
@@ -85,5 +85,13 @@ export class MailerService {
       html,
       'A new reset password email was sent.',
     );
+  }
+
+  private capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  private encodeUrl(url: string): string {
+    return encodeURIComponent(url);
   }
 }

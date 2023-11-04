@@ -1,0 +1,15 @@
+meta {
+  name: Refresh access
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/auth/refresh-access
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
