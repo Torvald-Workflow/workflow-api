@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Post,
   Res,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -27,7 +28,6 @@ import { PasswordDto } from './dtos/password.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { IResponseUser } from './interfaces/response-user.interface';
 import { ResponseUserMapper } from './mappers/reponse-user.mapper';
-import { ResponseUsersMapper } from './mappers/reponse-users.mapper';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -44,14 +44,14 @@ export class UsersController {
 
   @Get('/')
   @ApiOkResponse({
-    type: ResponseUsersMapper,
+    type: ResponseUserMapper,
     isArray: true,
   })
   public async getUsers(
     @Param() params: GetUsersParams,
   ): Promise<IResponseUser[]> {
     const users = await this.usersService.findAll(params);
-    return users.map((user) => ResponseUsersMapper.map(user));
+    return users.map((user) => ResponseUserMapper.map(user));
   }
 
   @Get('/:idOrUsername')
@@ -103,6 +103,25 @@ export class UsersController {
     description: 'The user is not logged in.',
   })
   public async updateUser(
+    @CurrentUser() id: number,
+    @Body() dto: UpdateUserDto,
+  ): Promise<IResponseUser> {
+    const user = await this.usersService.update(id, dto);
+    return ResponseUserMapper.map(user);
+  }
+
+  @Post('/avatar')
+  @ApiOkResponse({
+    type: ResponseUserMapper,
+    description: 'The avatar is updated.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Something is invalid on the request body.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'The user is not logged in.',
+  })
+  public async updateAvatar(
     @CurrentUser() id: number,
     @Body() dto: UpdateUserDto,
   ): Promise<IResponseUser> {

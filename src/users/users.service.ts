@@ -99,6 +99,11 @@ export class UsersService {
     return user;
   }
 
+  // public async updateAvatar(
+  //   userId: number,
+  //   avatar: string,
+  // ): Promise<UserEntity> {}
+
   public async updateEmail(
     userId: number,
     dto: ChangeEmailDto,
