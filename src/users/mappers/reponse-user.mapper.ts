@@ -53,6 +53,13 @@ export class ResponseUserMapper implements IResponseUser {
   confirmed: boolean;
 
   @ApiProperty({
+    description: 'User profile picture',
+    example: 'https://example.com/profile-picture.png',
+    type: String,
+  })
+  public profilePicture: string | null;
+
+  @ApiProperty({
     description: 'User creation date',
     example: '2021-01-01T00:00:00.000Z',
     type: String,
@@ -78,6 +85,7 @@ export class ResponseUserMapper implements IResponseUser {
       username: user.username,
       email: user.email,
       confirmed: user.confirmed,
+      profilePicture: user.profilePicture,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     });

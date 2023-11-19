@@ -2,16 +2,23 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   HttpStatus,
   Param,
+  ParseFilePipe,
   Patch,
   Post,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBadRequestResponse,
+  ApiBody,
+  ApiConsumes,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -25,6 +32,7 @@ import { ChangeEmailDto } from './dtos/change-email.dto';
 import { GetUserParams } from './dtos/get-user.params';
 import { GetUsersParams } from './dtos/get-users.params';
 import { PasswordDto } from './dtos/password.dto';
+import { UpdateUserProfileDto } from './dtos/update-user-profile.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { IResponseUser } from './interfaces/response-user.interface';
 import { ResponseUserMapper } from './mappers/reponse-user.mapper';
@@ -111,6 +119,12 @@ export class UsersController {
   }
 
   @Post('/avatar')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiBody({
+    description: 'The avatar image file.',
+    type: UpdateUserProfileDto,
+  })
+  @ApiConsumes('multipart/form-data')
   @ApiOkResponse({
     type: ResponseUserMapper,
     description: 'The avatar is updated.',
@@ -123,9 +137,18 @@ export class UsersController {
   })
   public async updateAvatar(
     @CurrentUser() id: number,
-    @Body() dto: UpdateUserDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({
+            fileType: /image\/(png|jpeg)/,
+          }),
+        ],
+      }),
+    )
+    avatar: Express.Multer.File,
   ): Promise<IResponseUser> {
-    const user = await this.usersService.update(id, dto);
+    const user = await this.usersService.updateAvatar(id, avatar);
     return ResponseUserMapper.map(user);
   }
 

@@ -8,6 +8,7 @@ export interface IUser {
   email: string;
   password: string;
   confirmed: boolean;
+  profilePicture?: string;
   createdAt: Date;
   updatedAt: Date;
   credentials: ICredentials;

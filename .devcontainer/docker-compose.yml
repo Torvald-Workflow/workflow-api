@@ -1,0 +1,46 @@
+services:
+  workflow-api:
+    container_name: 'workflow-api-devcontainer'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    network_mode: 'host'
+
+  database:
+    container_name: workflow-api-postgres
+    image: postgres:15
+    environment:
+      POSTGRES_USER: workflow
+      POSTGRES_PASSWORD: workflow
+      POSTGRES_DB: workflow
+    ports:
+      - '5432:5432'
+    volumes:
+      - workflow-api-postgres-data:/var/lib/postgresql/data
+
+  maildev:
+    container_name: workflow-api-maildev
+    image: maildev/maildev
+    ports:
+      - '1080:1080'
+      - '1025:1025'
+
+  minio:
+    container_name: workflow-api-minio
+    image: quay.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    volumes:
+      - workflow-api-minio-data:/data
+
+volumes:
+  workflow-api-postgres-data:
+  workflow-api-minio-data:

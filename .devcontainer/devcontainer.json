@@ -1,0 +1,72 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	"dockerComposeFile": "docker-compose.yml",
+	"workspaceFolder": "/workspace",
+	"service": "workflow-api",
+	"postCreateCommand": "yarn install",
+	"postStartCommand": "yarn start:dev",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"EditorConfig.EditorConfig",
+				"usernamehw.errorlens",
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"GitHub.copilot-labs",
+				"sburg.vscode-javascript-booster",
+				"christian-kohler.path-intellisense",
+				"christian-kohler.npm-intellisense",
+				"meganrogge.template-string-converter",
+				"ms-azuretools.vscode-docker",
+				"seatonjiang.gitmoji-vscode",
+				"eamodio.gitlens"
+			],
+			"settings": {
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": true,
+					"source.fixAll": "always",
+					"source.organizeImports": true
+				},
+				"[json]": {
+					"editor.defaultFormatter": "vscode.json-language-features"
+				},
+				"[dockerfile]": {
+					"editor.quickSuggestions": {
+						"strings": true
+					},
+					"editor.defaultFormatter": "ms-azuretools.vscode-docker"
+				},
+				"files.defaultLanguage": "tsx",
+				"files.eol": "\n",
+				"javascript.updateImportsOnFileMove.enabled": "always",
+				"npm.packageManager": "yarn",
+				"prettier.endOfLine": "lf",
+				"typescript.suggest.autoImports": true,
+				"typescript.updateImportsOnFileMove.enabled": "always",
+				"eslint.debug": true,
+				"javascript.preferences.quoteStyle": "single",
+				"typescript.preferences.quoteStyle": "single",
+				"editor.autoClosingQuotes": "always",
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.renderControlCharacters": true,
+				"editor.acceptSuggestionOnCommitCharacter": false,
+				"editor.suggest.showStatusBar": true,
+				"editor.suggestSelection": "first",
+				"editor.suggest.insertMode": "replace"
+			}
+		}
+	},
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached",
+		"source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+	],
+	"features": {
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+	}
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

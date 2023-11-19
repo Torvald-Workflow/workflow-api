@@ -4,6 +4,7 @@ export interface IAuthResponseUser {
   lastName: string;
   username: string;
   email: string;
+  profilePicture?: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -5,6 +5,7 @@ export interface IResponseUser {
   username: string;
   email: string;
   confirmed: boolean;
+  profilePicture: string | null;
   createdAt: string;
   updatedAt: string;
 }

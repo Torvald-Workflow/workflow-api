@@ -43,6 +43,9 @@ export class UserEntity implements IUser {
   @Matches(BCRYPT_HASH)
   public password: string;
 
+  @Property({ columnType: 'longtext', nullable: true })
+  public profilePicture?: string;
+
   @Property({ onCreate: () => new Date() })
   public createdAt: Date = new Date();
 

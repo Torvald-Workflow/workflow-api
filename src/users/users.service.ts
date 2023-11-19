@@ -6,8 +6,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcrypt';
 import { isInt } from 'class-validator';
+import * as crypto from 'crypto';
+import { MinioService } from 'nestjs-minio-client';
 import { CommonService } from 'src/common/common.service';
 import { SLUG_REGEX } from 'src/common/consts/regex.const';
 import { isNull, isUndefined } from 'src/common/utils/validation.util';
@@ -23,6 +26,8 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly usersRepository: EntityRepository<UserEntity>,
     private readonly commonService: CommonService,
+    private readonly configService: ConfigService,
+    private readonly minioService: MinioService,
   ) {}
 
   public async create(
@@ -43,6 +48,7 @@ export class UsersService {
       lastName: lastName.toLowerCase(),
       username,
       password: await hash(password, 10),
+      profilePicture: null,
     });
     await this.commonService.saveEntity(this.usersRepository, user, true);
     return user;
@@ -99,10 +105,45 @@ export class UsersService {
     return user;
   }
 
-  // public async updateAvatar(
-  //   userId: number,
-  //   avatar: string,
-  // ): Promise<UserEntity> {}
+  public async updateAvatar(
+    userId: number,
+    avatar: Express.Multer.File,
+  ): Promise<UserEntity> {
+    if (
+      !(avatar.mimetype.includes('png') || avatar.mimetype.includes('jpeg'))
+    ) {
+      throw new BadRequestException('Invalid file type');
+    }
+
+    const user = await this.findOneById(userId);
+
+    const tempAvatarName = `${user.id}-${Date.now()}-${avatar.originalname}`;
+    const hashedAvatarName = crypto
+      .createHash('md5')
+      .update(tempAvatarName)
+      .digest('hex');
+
+    const extension = avatar.originalname.substring(
+      avatar.originalname.lastIndexOf('.'),
+      avatar.originalname.length,
+    );
+
+    const filename = user.id + '/' + hashedAvatarName + extension;
+    const fileBuffer = avatar.buffer;
+
+    await this.minioService.client
+      .putObject('workflow', filename, fileBuffer)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    user.profilePicture = `${this.configService.get(
+      'MINIO_BUCKET',
+    )}/${filename}`;
+
+    await this.commonService.saveEntity(this.usersRepository, user);
+    return user;
+  }
 
   public async updateEmail(
     userId: number,

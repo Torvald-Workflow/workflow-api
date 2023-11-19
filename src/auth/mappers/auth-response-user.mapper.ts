@@ -46,6 +46,13 @@ export class AuthResponseUserMapper implements IAuthResponseUser {
   public email: string;
 
   @ApiProperty({
+    description: 'User profile picture',
+    example: 'https://example.com/profile-picture.png',
+    type: String,
+  })
+  public profilePicture?: string;
+
+  @ApiProperty({
     description: 'User creation date',
     example: '2021-01-01T00:00:00.000Z',
     type: String,
@@ -70,6 +77,7 @@ export class AuthResponseUserMapper implements IAuthResponseUser {
       lastName: user.lastName,
       username: user.username,
       email: user.email,
+      profilePicture: user.profilePicture,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     });
